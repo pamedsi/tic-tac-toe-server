@@ -11,6 +11,7 @@ import uff.redes.tictactoeserver.service.SessionService;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/session")
 public class SessionController {
     private static final Logger log = LoggerFactory.getLogger(SessionController.class);
     private final SessionService sessionService;
