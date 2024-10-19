@@ -3,7 +3,8 @@ package uff.redes.tictactoeserver.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import uff.redes.tictactoeserver.dto.Session;
+import uff.redes.tictactoeserver.domain.Session;
+import uff.redes.tictactoeserver.dto.PlayerDTO;
 
 import java.util.UUID;
 
@@ -13,15 +14,17 @@ public class SessionService {
     private Session xSession;
     private Session oSession;
 
-    public void startSession(Session session) {
-        validateIfCanStartSession(session);
-        switch (session.player()) {
+    public UUID startSession(PlayerDTO player) {
+        validateIfCanStartSession(player);
+        Session session = new Session(UUID.randomUUID(), player.player());
+        switch (player.player()) {
             case X -> xSession = session;
             case O -> oSession = session;
         }
+        return session.id();
     }
 
-    private void validateIfCanStartSession(Session session) {
+    private void validateIfCanStartSession(PlayerDTO session) {
         switch (session.player()) {
             case X -> {
                 if (xSession != null) {

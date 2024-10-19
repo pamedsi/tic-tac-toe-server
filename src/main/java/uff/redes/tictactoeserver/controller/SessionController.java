@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import uff.redes.tictactoeserver.dto.Session;
+import uff.redes.tictactoeserver.dto.PlayerDTO;
 import uff.redes.tictactoeserver.service.SessionService;
+
+import java.util.UUID;
 
 @RestController
 public class SessionController {
@@ -20,10 +22,11 @@ public class SessionController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addNewSession(@RequestBody Session session) {
-        log.info("Trying to start a new session: {}", session.id());
-        sessionService.startSession(session);
-        log.info("Player {} connected successfully! ✅", session.id());
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public UUID addNewSession(@RequestBody PlayerDTO session) {
+        log.info("Trying to start a session for {} player...", session.player());
+        UUID id = sessionService.startSession(session);
+        log.info("Player {} connected successfully! ✅", session.player());
+        return id;
     }
 }
