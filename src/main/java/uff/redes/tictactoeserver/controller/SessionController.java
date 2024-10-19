@@ -3,10 +3,8 @@ package uff.redes.tictactoeserver.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uff.redes.tictactoeserver.domain.Session;
 import uff.redes.tictactoeserver.dto.PlayerDTO;
 import uff.redes.tictactoeserver.service.SessionService;
 
@@ -21,12 +19,21 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
-    @PostMapping
+    @PostMapping("/join")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public UUID addNewSession(@RequestBody PlayerDTO session) {
+    public Session addNewSession(@RequestBody PlayerDTO session) {
         log.info("Trying to start a session for {} player...", session.player());
-        UUID id = sessionService.startSession(session);
+        Session id = sessionService.startSession(session);
         log.info("Player {} connected successfully! ✅", session.player());
         return id;
+    }
+
+    @GetMapping("/validate/{sessionID}")
+    @ResponseStatus(HttpStatus.OK)
+    public Session validateSession(@PathVariable UUID sessionID) {
+        log.info("Validating session...");
+        Session session = sessionService.getSession(sessionID);
+        log.info("Session ok! ✅ Player {} can join", session.player());
+        return session;
     }
 }
