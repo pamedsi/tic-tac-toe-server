@@ -58,4 +58,8 @@ public class SessionService {
         if (oSession.id().equals(sessionID)) return oSession;
         throw new ServerException("Session not found!", HttpStatus.NOT_FOUND);
     }
+
+    public boolean bothPlayersConnected() {
+        return xSession != null && oSession != null;
+    }
 }
