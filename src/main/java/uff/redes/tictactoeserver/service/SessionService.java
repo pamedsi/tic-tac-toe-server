@@ -2,9 +2,11 @@ package uff.redes.tictactoeserver.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uff.redes.tictactoeserver.domain.Session;
 import uff.redes.tictactoeserver.dto.PlayerDTO;
+import uff.redes.tictactoeserver.exception.ServerException;
 
 import java.util.UUID;
 
@@ -14,14 +16,14 @@ public class SessionService {
     private Session xSession;
     private Session oSession;
 
-    public UUID startSession(PlayerDTO player) {
+    public Session startSession(PlayerDTO player) {
         validateIfCanStartSession(player);
         Session session = new Session(UUID.randomUUID(), player.player());
         switch (player.player()) {
             case X -> xSession = session;
             case O -> oSession = session;
         }
-        return session.id();
+        return session;
     }
 
     private void validateIfCanStartSession(PlayerDTO session) {
@@ -47,7 +49,13 @@ public class SessionService {
             this.oSession = null;
         }
         else {
-            log.error("Session not found!");
+            throw new ServerException("Session not found!", HttpStatus.NOT_FOUND);
         }
+    }
+
+    public Session getSession(UUID sessionID) {
+        if (xSession.id().equals(sessionID)) return xSession;
+        if (oSession.id().equals(sessionID)) return oSession;
+        throw new ServerException("Session not found!", HttpStatus.NOT_FOUND);
     }
 }
