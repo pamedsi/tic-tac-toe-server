@@ -1,9 +1,9 @@
-package uff.redes.jogodavelhaservidor.service;
+package uff.redes.tictactoeserver.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import uff.redes.jogodavelhaservidor.dto.Session;
+import uff.redes.tictactoeserver.dto.Session;
 
 import java.util.UUID;
 

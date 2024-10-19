@@ -1,4 +1,4 @@
-package uff.redes.jogodavelhaservidor.dto;
+package uff.redes.tictactoeserver.dto;
 
 public record ExceptionMessage(
         String message

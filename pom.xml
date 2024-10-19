@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uff.redes</groupId>
-    <artifactId>jogo-da-velha-servidor</artifactId>
+    <artifactId>tic-tac-toe-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>jogo-da-velha-servidor</name>
-    <description>jogo-da-velha-servidor</description>
+    <name>tic-tac-toe-server</name>
+    <description>tic-tac-toe-server</description>
     <url/>
     <licenses>
         <license/>

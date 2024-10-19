@@ -1,4 +1,4 @@
-package uff.redes.jogodavelhaservidor.dto;
+package uff.redes.tictactoeserver.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

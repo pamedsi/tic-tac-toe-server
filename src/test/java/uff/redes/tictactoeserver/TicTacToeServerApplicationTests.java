@@ -1,10 +1,10 @@
-package uff.redes.jogodavelhaservidor;
+package uff.redes.tictactoeserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class JogoDaVelhaServidorApplicationTests {
+class TicTacToeServerApplicationTests {
 
     @Test
     void contextLoads() {
