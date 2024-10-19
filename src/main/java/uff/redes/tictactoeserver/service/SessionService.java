@@ -53,7 +53,7 @@ public class SessionService {
         }
     }
 
-    public Session getSession(UUID sessionID) {
+    public Session validateSession(UUID sessionID) {
         if (xSession.id().equals(sessionID)) return xSession;
         if (oSession.id().equals(sessionID)) return oSession;
         throw new ServerException("Session not found!", HttpStatus.NOT_FOUND);

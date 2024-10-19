@@ -33,7 +33,7 @@ public class SessionController {
     @ResponseStatus(HttpStatus.OK)
     public Session validateSession(@PathVariable UUID sessionID) {
         log.info("Validating session...");
-        Session session = sessionService.getSession(sessionID);
+        Session session = sessionService.validateSession(sessionID);
         log.info("Session ok! ✅ Player {} can join", session.player());
         return session;
     }
