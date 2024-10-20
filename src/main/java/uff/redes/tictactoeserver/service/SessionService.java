@@ -4,17 +4,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import uff.redes.tictactoeserver.domain.GameEvent;
 import uff.redes.tictactoeserver.domain.Session;
 import uff.redes.tictactoeserver.dto.PlayerDTO;
+import uff.redes.tictactoeserver.event.GameEventEmitter;
 import uff.redes.tictactoeserver.exception.ServerException;
 
 import java.util.UUID;
 
 @Service
 public class SessionService {
-    private static final Logger log = LoggerFactory.getLogger(SessionService.class);
+//    private static final Logger log = LoggerFactory.getLogger(SessionService.class);
+    private final GameEventEmitter gameEventEmitter;
     private Session xSession;
     private Session oSession;
+
+    public SessionService(GameEventEmitter gameEventEmitter) {
+        this.gameEventEmitter = gameEventEmitter;
+    }
 
     public Session startSession(PlayerDTO player) {
         validateIfCanStartSession(player);
@@ -23,6 +30,7 @@ public class SessionService {
             case X -> xSession = session;
             case O -> oSession = session;
         }
+        gameEventEmitter.emmit(GameEvent.PLAYER_JOINED);
         return session;
     }
 
