@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import uff.redes.tictactoeserver.domain.Session;
+import uff.redes.tictactoeserver.dto.GameStatusDTO;
 import uff.redes.tictactoeserver.dto.Move;
 import uff.redes.tictactoeserver.exception.ServerException;
 import uff.redes.tictactoeserver.service.GameService;
@@ -37,5 +38,14 @@ public class GameController {
     public void move(@RequestBody Move move) {
         Session session = this.sessionService.validateSession(move.sessionID());
         gameService.move(move, session.player());
+    }
+
+    @GetMapping("/status")
+    @ResponseStatus(HttpStatus.OK)
+    public GameStatusDTO getStatus() {
+        log.info("Getting game status...");
+        GameStatusDTO gameStatusDTO = gameService.getStatus();
+        log.info("Game status got successfully!");
+        return gameStatusDTO;
     }
 }
