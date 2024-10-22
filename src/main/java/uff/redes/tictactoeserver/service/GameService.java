@@ -5,38 +5,35 @@ import org.springframework.stereotype.Service;
 import uff.redes.tictactoeserver.domain.Cell;
 import uff.redes.tictactoeserver.domain.GameEvent;
 import uff.redes.tictactoeserver.domain.GameStatus;
-import uff.redes.tictactoeserver.dto.GameStatusDTO;
-import uff.redes.tictactoeserver.dto.Move;
-import uff.redes.tictactoeserver.dto.Player;
+import uff.redes.tictactoeserver.dto.*;
 import uff.redes.tictactoeserver.event.GameEventEmitter;
 import uff.redes.tictactoeserver.exception.ServerException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameService {
     private final GameEventEmitter gameEventEmitter;
     private GameStatus gameStatus;
     private List<List<Cell>> grid;
-    private Player turn;
     private int moves;
 
     public GameService(GameEventEmitter gameEventEmitter){
         this.initGrid();
-        this.gameStatus = GameStatus.WAITING_START;
+        this.gameStatus = GameStatus.WAITING_FIRST_PLAYER;
         this.moves = 0;
         this.gameEventEmitter = gameEventEmitter;
     }
 
     public void start() {
-        if (gameStatus == GameStatus.STARTED) {
+        if (gameStatus == GameStatus.X_TURN || gameStatus == GameStatus.O_TURN) {
             throw new ServerException("Game already started!", HttpStatus.CONFLICT);
         }
-        gameStatus = GameStatus.STARTED;
-        turn = Player.X;
+        gameStatus = GameStatus.X_TURN;
         printGrid();
-        gameEventEmitter.emmit(GameEvent.MATCH_STARTED);
+        gameEventEmitter.emmit(new GameEventDTO(GameEvent.MATCH_STARTED, null, null));
     }
 
     public void printGrid() {
@@ -45,14 +42,19 @@ public class GameService {
         System.out.println(grid.get(2));
     }
 
-    public void move(Move move, Player player) {
-        validateMove(move);
-        grid.get(move.row()).set(move.column(), Cell.valueOf(player.toString()));
+    public void move(MoveRequest moveRequest, Player player) {
+        validateMove(moveRequest);
+        grid.get(moveRequest.row()).set(moveRequest.column(), Cell.valueOf(player.toString()));
         printGrid();
-        if (turn == Player.X) turn = Player.O;
-        else turn = Player.X;
+        if (gameStatus == GameStatus.X_TURN) gameStatus = GameStatus.O_TURN;
+        else gameStatus = GameStatus.X_TURN;
         this.moves++;
-        gameEventEmitter.emmit(GameEvent.MOVE);
+        GameEventDTO gameEventDTO = new GameEventDTO (
+                GameEvent.MOVE,
+                Optional.of(new PlayerDTO(player)),
+                Optional.of(moveRequest)
+        );
+        gameEventEmitter.emmit(gameEventDTO);
     }
 
     private void initGrid() {
@@ -63,13 +65,17 @@ public class GameService {
         this.grid = grid;
     }
 
-    private void validateMove(Move move) {
-        if (grid.get(move.row()).get(move.column()) != Cell.EMPTY) {
-            throw new ServerException("Você não pode jogar nesta posição!", HttpStatus.CONFLICT);
+    private void validateMove(MoveRequest moveRequest) {
+        if (grid.get(moveRequest.row()).get(moveRequest.column()) != Cell.EMPTY) {
+            throw new ServerException("You can't play on that position. It's already occupied!", HttpStatus.CONFLICT);
         }
     }
 
     public GameStatusDTO getStatus() {
         return new GameStatusDTO(gameStatus);
+    }
+
+    public void setStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 }
