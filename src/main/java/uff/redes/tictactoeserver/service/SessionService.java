@@ -1,27 +1,24 @@
 package uff.redes.tictactoeserver.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uff.redes.tictactoeserver.domain.GameEvent;
 import uff.redes.tictactoeserver.domain.Session;
 import uff.redes.tictactoeserver.dto.PlayerDTO;
-import uff.redes.tictactoeserver.event.GameEventEmitter;
 import uff.redes.tictactoeserver.exception.ServerException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class SessionService {
 //    private static final Logger log = LoggerFactory.getLogger(SessionService.class);
-    private final GameEventEmitter gameEventEmitter;
     private Session xSession;
     private Session oSession;
+    private List<Session> guests;
 
-    public SessionService(GameEventEmitter gameEventEmitter) {
-        this.gameEventEmitter = gameEventEmitter;
-    }
+//    public SessionService(GameEventEmitter gameEventEmitter) {
+//        this.gameEventEmitter = gameEventEmitter;
+//    }
 
     public Session startSession(PlayerDTO player) {
         validateIfCanStartSession(player);
@@ -30,8 +27,11 @@ public class SessionService {
             case X -> xSession = session;
             case O -> oSession = session;
         }
-        gameEventEmitter.emmit(GameEvent.PLAYER_JOINED);
         return session;
+    }
+
+    public boolean firstPlayerJoined() {
+        return (xSession == null && oSession != null) || (oSession == null && xSession != null);
     }
 
     private void validateIfCanStartSession(PlayerDTO session) {
@@ -50,10 +50,10 @@ public class SessionService {
     }
 
     public void endSession(UUID id) {
-        if (xSession.id().equals(id)) {
+        if (xSession.getID().equals(id)) {
             this.xSession = null;
         }
-        else if (oSession.id().equals(id)) {
+        else if (oSession.getID().equals(id)) {
             this.oSession = null;
         }
         else {
@@ -62,12 +62,32 @@ public class SessionService {
     }
 
     public Session validateSession(UUID sessionID) {
-        if (xSession.id().equals(sessionID)) return xSession;
-        if (oSession.id().equals(sessionID)) return oSession;
+        if (xSession.getID().equals(sessionID)) return xSession;
+        if (oSession.getID().equals(sessionID)) return oSession;
         throw new ServerException("Session not found!", HttpStatus.NOT_FOUND);
     }
 
     public boolean bothPlayersConnected() {
-        return xSession != null && oSession != null;
+        if (xSession != null && oSession != null) {
+            return xSession.isWSConnected() && oSession.isWSConnected();
+        }
+        return false;
+    }
+
+    public boolean isAPlayer(UUID sessionID) {
+        return xSession.getID().equals(sessionID) || oSession.getID().equals(sessionID);
+    }
+
+    public void connectWS(UUID sessionID) {
+        if (xSession.getID().equals(sessionID)) {
+            xSession.setWSConnected(true);
+        }
+        else if (oSession.getID().equals(sessionID)) {
+            oSession.setWSConnected(true);
+        }
+    }
+
+    public void joinGuest(Session session) {
+        // TODO
     }
 }
