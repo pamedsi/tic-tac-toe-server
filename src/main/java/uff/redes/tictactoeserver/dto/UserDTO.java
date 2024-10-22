@@ -1,5 +1,6 @@
 package uff.redes.tictactoeserver.dto;
 
-public record PlayerDTO (
+public record UserDTO(
+        boolean isGuest,
         Player player
 ) {}
