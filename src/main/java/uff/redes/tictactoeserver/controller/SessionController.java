@@ -23,9 +23,9 @@ public class SessionController {
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Session addNewSession(@RequestBody PlayerDTO session) {
-        log.info("Trying to start a session for {} player...", session.player());
+        log.info("Trying to start a session for {} getPlayer...", session.player());
         Session id = sessionService.startSession(session);
-        log.info("Player {} connected successfully! ✅", session.player());
+        log.info("Player {} joined successfully! ✅", session.player());
         return id;
     }
 
@@ -34,7 +34,7 @@ public class SessionController {
     public Session validateSession(@PathVariable UUID sessionID) {
         log.info("Validating session...");
         Session session = sessionService.validateSession(sessionID);
-        log.info("Session ok! ✅ Player {} can join", session.player());
+        log.info("Session ok! ✅ Player {} can join", session.getPlayer());
         return session;
     }
 }
