@@ -3,7 +3,7 @@ package uff.redes.tictactoeserver.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uff.redes.tictactoeserver.domain.Session;
-import uff.redes.tictactoeserver.dto.PlayerDTO;
+import uff.redes.tictactoeserver.dto.UserDTO;
 import uff.redes.tictactoeserver.exception.ServerException;
 
 import java.util.List;
@@ -20,10 +20,15 @@ public class SessionService {
 //        this.gameEventEmitter = gameEventEmitter;
 //    }
 
-    public Session startSession(PlayerDTO player) {
-        validateIfCanStartSession(player);
-        Session session = new Session(UUID.randomUUID(), player.player());
-        switch (player.player()) {
+    public Session startSession(UserDTO user) {
+        if (user.isGuest()) {
+                Session guestSession = new Session(UUID.randomUUID(), null);
+                guests.add(guestSession);
+                return guestSession;
+        }
+        validateIfCanStartSession(user);
+        Session session = new Session(UUID.randomUUID(), user.player());
+        switch (user.player()) {
             case X -> xSession = session;
             case O -> oSession = session;
         }
@@ -34,7 +39,7 @@ public class SessionService {
         return (xSession == null && oSession != null) || (oSession == null && xSession != null);
     }
 
-    private void validateIfCanStartSession(PlayerDTO session) {
+    private void validateIfCanStartSession(UserDTO session) {
         switch (session.player()) {
             case X -> {
                 if (xSession != null) {
