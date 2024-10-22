@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import uff.redes.tictactoeserver.domain.Session;
 import uff.redes.tictactoeserver.dto.GameStatusDTO;
-import uff.redes.tictactoeserver.dto.Move;
+import uff.redes.tictactoeserver.dto.MoveRequest;
 import uff.redes.tictactoeserver.exception.ServerException;
 import uff.redes.tictactoeserver.service.GameService;
 import uff.redes.tictactoeserver.service.SessionService;
@@ -35,9 +35,9 @@ public class GameController {
 
     @PostMapping("/move")
     @ResponseStatus(HttpStatus.OK)
-    public void move(@RequestBody Move move) {
-        Session session = this.sessionService.validateSession(move.sessionID());
-        gameService.move(move, session.player());
+    public void move(@RequestBody MoveRequest moveRequest) {
+        Session session = this.sessionService.validateSession(moveRequest.sessionID());
+        gameService.move(moveRequest, session.getPlayer());
     }
 
     @GetMapping("/status")
