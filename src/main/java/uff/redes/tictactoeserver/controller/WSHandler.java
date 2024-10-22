@@ -28,11 +28,11 @@ public class WSHandler {
     private final ObjectMapper objectMapper;
     private final GameService gameService;
 
-    public WSHandler(GameEventEmitter gameEventEmitter, SessionService sessionService, ObjectMapper objectMapper, GameService gameService, GameService gameService1) {
+    public WSHandler(GameEventEmitter gameEventEmitter, SessionService sessionService, ObjectMapper objectMapper, GameService gameService) {
         this.gameEventEmitter = gameEventEmitter;
         this.sessionService = sessionService;
         this.objectMapper = objectMapper;
-        this.gameService = gameService1;
+        this.gameService = gameService;
     }
 
     @EventListener
@@ -43,14 +43,14 @@ public class WSHandler {
             sessionService.connectWS(sessionID);
             if (sessionService.firstPlayerJoined()) {
                 gameService.setStatus(GameStatus.WAITING_SECOND_PLAYER);
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.FIRST_PLAYER_JOINED, null, null));
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.FIRST_PLAYER_JOINED, null, null), 1500);
             }
             else if (sessionService.bothPlayersConnected()) {
                 gameService.setStatus(GameStatus.WAITING_START);
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.BOTH_PLAYERS_JOINED, null, null));
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.BOTH_PLAYERS_JOINED, null, null), 1500);
             }
             else {
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.GUEST_JOINED, null, null));
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.GUEST_JOINED, null, null), 0);
             }
         }
     }
