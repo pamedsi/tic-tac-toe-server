@@ -33,7 +33,7 @@ public class GameService {
         }
         gameStatus = GameStatus.X_TURN;
         printGrid();
-        gameEventEmitter.emmit(new GameEventDTO(GameEvent.MATCH_STARTED, null, null));
+        gameEventEmitter.emmit(new GameEventDTO(GameEvent.MATCH_STARTED, null, null), 0);
     }
 
     public void printGrid() {
@@ -51,10 +51,10 @@ public class GameService {
         this.moves++;
         GameEventDTO gameEventDTO = new GameEventDTO (
                 GameEvent.MOVE,
-                Optional.of(new PlayerDTO(player)),
+                Optional.of(new UserDTO(false, player)),
                 Optional.of(moveRequest)
         );
-        gameEventEmitter.emmit(gameEventDTO);
+        gameEventEmitter.emmit(gameEventDTO, 0);
     }
 
     private void initGrid() {
