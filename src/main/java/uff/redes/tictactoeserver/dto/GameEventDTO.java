@@ -8,6 +8,6 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record GameEventDTO(
         GameEvent type,
-        Optional<PlayerDTO> player,
+        Optional<UserDTO> player,
         Optional<MoveRequest> move
 ) {}
