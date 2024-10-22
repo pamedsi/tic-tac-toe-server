@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import uff.redes.tictactoeserver.domain.Session;
-import uff.redes.tictactoeserver.dto.PlayerDTO;
+import uff.redes.tictactoeserver.dto.UserDTO;
 import uff.redes.tictactoeserver.service.SessionService;
 
 import java.util.UUID;
@@ -22,10 +22,16 @@ public class SessionController {
 
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Session addNewSession(@RequestBody PlayerDTO session) {
-        log.info("Trying to start a session for {} getPlayer...", session.player());
-        Session id = sessionService.startSession(session);
-        log.info("Player {} joined successfully! ✅", session.player());
+    public Session addNewSession(@RequestBody UserDTO session) {
+        Session id;
+        log.info("User joining...");
+        id = sessionService.startSession(session);
+        if (session.isGuest()) {
+            log.info("Guest joined successfully! ✅");
+        }
+        else {
+            log.info("Player {} joined successfully! ✅", session.player());
+        }
         return id;
     }
 
