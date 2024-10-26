@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import uff.redes.tictactoeserver.domain.GameEvent;
@@ -20,15 +20,15 @@ import uff.redes.tictactoeserver.service.SessionService;
 
 import java.util.UUID;
 
-@Component
-public class WSHandler {
-    private static final Logger log = LoggerFactory.getLogger(WSHandler.class);
+@Controller
+public class WebSocketHandler {
+    private static final Logger log = LoggerFactory.getLogger(WebSocketHandler.class);
     private final GameEventEmitter gameEventEmitter;
     private final SessionService sessionService;
     private final ObjectMapper objectMapper;
     private final GameService gameService;
 
-    public WSHandler(GameEventEmitter gameEventEmitter, SessionService sessionService, ObjectMapper objectMapper, GameService gameService) {
+    public WebSocketHandler(GameEventEmitter gameEventEmitter, SessionService sessionService, ObjectMapper objectMapper, GameService gameService) {
         this.gameEventEmitter = gameEventEmitter;
         this.sessionService = sessionService;
         this.objectMapper = objectMapper;
@@ -43,14 +43,14 @@ public class WSHandler {
             sessionService.connectWS(sessionID);
             if (sessionService.firstPlayerJoined()) {
                 gameService.setStatus(GameStatus.WAITING_SECOND_PLAYER);
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.FIRST_PLAYER_JOINED, null, null), 1500);
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.FIRST_PLAYER_JOINED, null, null));
             }
             else if (sessionService.bothPlayersConnected()) {
                 gameService.setStatus(GameStatus.WAITING_START);
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.BOTH_PLAYERS_JOINED, null, null), 1500);
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.BOTH_PLAYERS_JOINED, null, null));
             }
             else {
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.GUEST_JOINED, null, null), 0);
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.GUEST_JOINED, null, null));
             }
         }
     }
