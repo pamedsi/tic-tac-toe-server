@@ -43,14 +43,14 @@ public class WebSocketHandler {
             sessionService.connectWS(sessionID);
             if (sessionService.firstPlayerJoined()) {
                 gameService.setStatus(GameStatus.WAITING_SECOND_PLAYER);
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.FIRST_PLAYER_JOINED, null, null));
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.FIRST_PLAYER_JOINED));
             }
             else if (sessionService.bothPlayersConnected()) {
                 gameService.setStatus(GameStatus.WAITING_START);
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.BOTH_PLAYERS_JOINED, null, null));
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.BOTH_PLAYERS_JOINED));
             }
             else {
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.GUEST_JOINED, null, null));
+                gameEventEmitter.emmit(new GameEventDTO(GameEvent.GUEST_JOINED));
             }
         }
     }
