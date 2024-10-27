@@ -80,14 +80,15 @@ public class SessionService {
     }
 
     public boolean isAPlayer(UUID sessionID) {
-        return xSession.getID().equals(sessionID) || oSession.getID().equals(sessionID);
+        return (xSession != null && xSession.getID().equals(sessionID)) ||
+                (oSession != null && oSession.getID().equals(sessionID));
     }
 
     public void connectWS(UUID sessionID) {
-        if (xSession.getID().equals(sessionID)) {
+        if (xSession != null && xSession.getID().equals(sessionID)) {
             xSession.setWSConnected(true);
         }
-        else if (oSession.getID().equals(sessionID)) {
+        else if (oSession != null && oSession.getID().equals(sessionID)) {
             oSession.setWSConnected(true);
         }
     }
