@@ -43,4 +43,12 @@ public class SessionController {
         log.info("Session ok! ✅ Player {} can join", session.getPlayer());
         return session;
     }
+
+    @PostMapping("/restart")
+    @ResponseStatus(HttpStatus.CONTINUE)
+    public void restart() {
+        log.info("Restarting session...");
+        sessionService.reset();
+        log.info("Sessions restarted, anyone can join!");
+    }
 }

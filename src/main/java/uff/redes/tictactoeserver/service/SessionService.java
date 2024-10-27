@@ -95,4 +95,9 @@ public class SessionService {
     public void joinGuest(Session session) {
         // TODO
     }
+
+    public void reset() {
+        this.oSession = null;
+        this.xSession = null;
+    }
 }
