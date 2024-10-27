@@ -21,7 +21,7 @@ public class GameEventEmitter {
         if (event.type() == GameEvent.FIRST_PLAYER_JOINED || event.type() == GameEvent.BOTH_PLAYERS_JOINED) {
             CompletableFuture.runAsync(() -> {
                 try {
-                    sleep(500);
+                    sleep(1000);
                     messagingTemplate.convertAndSend("/topic/game", event);
                 }
                 catch (InterruptedException exception) {
