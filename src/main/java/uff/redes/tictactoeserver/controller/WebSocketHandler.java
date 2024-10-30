@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.messaging.AbstractSubProtocolEvent;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import uff.redes.tictactoeserver.domain.GameEvent;
@@ -39,7 +40,11 @@ public class WebSocketHandler {
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         UUID sessionID = getSessionID(event);
         boolean isAPlayer = sessionService.isAPlayer(sessionID);
-        if (isAPlayer) {
+        boolean firstTimeConnecting = !sessionService.isWSConnected(sessionID);
+        if (isAPlayer && !firstTimeConnecting) {
+            log.info("Player connected again: {}", sessionID);
+        }
+        else if (isAPlayer) {
             sessionService.connectWS(sessionID);
             if (sessionService.firstPlayerJoined()) {
                 gameService.setStatus(GameStatus.WAITING_SECOND_PLAYER);
@@ -49,13 +54,13 @@ public class WebSocketHandler {
                 gameService.setStatus(GameStatus.WAITING_START);
                 gameEventEmitter.emmit(new GameEventDTO(GameEvent.BOTH_PLAYERS_JOINED));
             }
-            else {
-                gameEventEmitter.emmit(new GameEventDTO(GameEvent.GUEST_JOINED));
-            }
+        }
+        else {
+            gameEventEmitter.emmit(new GameEventDTO(GameEvent.GUEST_JOINED));
         }
     }
 
-    private UUID getSessionID(SessionConnectedEvent event) {
+    private UUID getSessionID(AbstractSubProtocolEvent event) {
         String errorMessage = "Erro ao obter o ID da sessão!";
         try {
             String json = objectMapper.writeValueAsString(event.getMessage().getHeaders().get("simpConnectMessage"));
@@ -77,6 +82,8 @@ public class WebSocketHandler {
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         log.info("Conexão WebSocket encerrada");
+//        UUID sessionID = getSessionID(event);
+//        log.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAA {}", sessionID);
         log.info("ID da sessão: {}", event.getSessionId());
         // TODO
     }

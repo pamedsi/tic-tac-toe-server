@@ -101,4 +101,10 @@ public class SessionService {
         this.oSession = null;
         this.xSession = null;
     }
+
+    public boolean isWSConnected(UUID sessionID) {
+        boolean xConnected = xSession != null && xSession.getID().equals(sessionID) && xSession.isWSConnected();
+        boolean oConnected = oSession != null && oSession.getID().equals(sessionID) && oSession.isWSConnected();
+        return xConnected || oConnected;
+    }
 }
