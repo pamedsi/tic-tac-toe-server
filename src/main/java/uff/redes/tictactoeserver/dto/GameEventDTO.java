@@ -9,7 +9,7 @@ import java.util.Optional;
 public record GameEventDTO(
         GameEvent type,
         Optional<UserDTO> player,
-        Optional<MoveRequest> move
+        Optional<MoveEvent> move
 ) {
     public GameEventDTO (GameEvent type) {
         this(type, Optional.empty(), Optional.empty());
