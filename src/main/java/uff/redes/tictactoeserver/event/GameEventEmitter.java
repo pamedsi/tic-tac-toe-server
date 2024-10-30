@@ -14,6 +14,6 @@ public class GameEventEmitter {
 
     public void emmit(GameEventDTO event) {
             messagingTemplate.convertAndSend("/topic/game", event);
-        }
+    }
 
 }
