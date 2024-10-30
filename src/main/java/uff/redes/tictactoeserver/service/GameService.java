@@ -44,7 +44,8 @@ public class GameService {
 
     public void move(MoveRequest moveRequest, Player player) {
         validateMove(moveRequest);
-        grid.get(moveRequest.row()).set(moveRequest.column(), Cell.valueOf(player.toString()));
+        List<Cell> row = grid.get(moveRequest.row());
+        row.set(moveRequest.column(), Cell.valueOf(player.toString()));
         printGrid();
         if (gameStatus == GameStatus.X_TURN) gameStatus = GameStatus.O_TURN;
         else gameStatus = GameStatus.X_TURN;
@@ -52,16 +53,16 @@ public class GameService {
         GameEventDTO gameEventDTO = new GameEventDTO (
                 GameEvent.MOVE,
                 Optional.of(new UserDTO(false, player)),
-                Optional.of(moveRequest)
+                Optional.of(new MoveEvent(player, moveRequest.row(), moveRequest.column()))
         );
         gameEventEmitter.emmit(gameEventDTO);
     }
 
     private void initGrid() {
         List<List<Cell>> grid = new ArrayList<>();
-        grid.add(List.of(new Cell[]{Cell.EMPTY, Cell.EMPTY, Cell.EMPTY}));
-        grid.add(List.of(new Cell[]{Cell.EMPTY, Cell.EMPTY, Cell.EMPTY}));
-        grid.add(List.of(new Cell[]{Cell.EMPTY, Cell.EMPTY, Cell.EMPTY}));
+        grid.add(new ArrayList<>(List.of(new Cell[]{Cell.EMPTY, Cell.EMPTY, Cell.EMPTY})));
+        grid.add(new ArrayList<>(List.of(new Cell[]{Cell.EMPTY, Cell.EMPTY, Cell.EMPTY})));
+        grid.add(new ArrayList<>(List.of(new Cell[]{Cell.EMPTY, Cell.EMPTY, Cell.EMPTY})));
         this.grid = grid;
     }
 
