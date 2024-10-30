@@ -73,10 +73,15 @@ public class GameService {
     }
 
     public GameStatusDTO getStatus() {
-        return new GameStatusDTO(gameStatus);
+        return new GameStatusDTO(gameStatus, grid);
     }
 
     public void setStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
+    }
+
+    public void restart() {
+        initGrid();
+        this.gameStatus = GameStatus.WAITING_FIRST_PLAYER;
     }
 }

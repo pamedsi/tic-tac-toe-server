@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import uff.redes.tictactoeserver.domain.GameStatus;
 import uff.redes.tictactoeserver.domain.Session;
 import uff.redes.tictactoeserver.dto.UserDTO;
 import uff.redes.tictactoeserver.service.GameService;
@@ -53,7 +52,7 @@ public class SessionController {
     public void restart() {
         log.info("Restarting session...");
         sessionService.reset();
-        gameService.setStatus(GameStatus.WAITING_FIRST_PLAYER);
+        gameService.restart();
         log.info("Sessions restarted, anyone can join!");
     }
 }
