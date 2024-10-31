@@ -43,7 +43,7 @@ public class GameService {
     }
 
     public void move(MoveRequest moveRequest, Player player) {
-        validateMove(moveRequest);
+        validateMove(moveRequest, player);
         List<Cell> row = grid.get(moveRequest.row());
         row.set(moveRequest.column(), Cell.valueOf(player.toString()));
         printGrid();
@@ -66,7 +66,13 @@ public class GameService {
         this.grid = grid;
     }
 
-    private void validateMove(MoveRequest moveRequest) {
+    private void validateMove(MoveRequest moveRequest, Player player) {
+        if (    gameStatus == GameStatus.X_TURN && player.equals(Player.O) ||
+                gameStatus == GameStatus.O_TURN && player.equals(Player.X) ||
+                gameStatus != GameStatus.X_TURN && gameStatus != GameStatus.O_TURN
+        ) {
+            throw new ServerException("It's not your turn!", HttpStatus.FORBIDDEN);
+        }
         if (grid.get(moveRequest.row()).get(moveRequest.column()) != Cell.EMPTY) {
             throw new ServerException("You can't play on that position. It's already occupied!", HttpStatus.CONFLICT);
         }
