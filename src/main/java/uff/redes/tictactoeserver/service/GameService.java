@@ -97,7 +97,7 @@ public class GameService {
 
     }
 
-    private boolean checkIfThereIsAWinnerHorizontally() {
+    private boolean IsThereAWinnerHorizontally() {
         boolean hasAWinnerHorizontally = false;
         for (List<Cell> row : this.grid) {
             if (row.stream().distinct().count() == 1) {
@@ -109,7 +109,14 @@ public class GameService {
     }
 
     private boolean checkIfThereIsAWinnerVertically() {
-        // TODO
+        for (int columIndex = 0; columIndex < 3; columIndex++) {
+            List<Cell> column = List.of(
+                    this.grid.get(0).get(columIndex),
+                    this.grid.get(1).get(columIndex),
+                    this.grid.get(2).get(columIndex)
+            );
+            if (column.stream().distinct().count() == 1) return true;
+        }
         return false;
     }
 }
