@@ -52,7 +52,7 @@ public class SessionController {
     public void restart() {
         log.info("Restarting session...");
         sessionService.reset();
-        gameService.restart();
+        gameService.initGame();
         log.info("Sessions restarted, anyone can join!");
     }
 }
