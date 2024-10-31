@@ -67,9 +67,11 @@ public class GameService {
     }
 
     private void validateMove(MoveRequest moveRequest, Player player) {
+        if (gameStatus != GameStatus.X_TURN && gameStatus != GameStatus.O_TURN) {
+            throw new ServerException("The game hasn't started!", HttpStatus.BAD_REQUEST);
+        }
         if (    gameStatus == GameStatus.X_TURN && player.equals(Player.O) ||
-                gameStatus == GameStatus.O_TURN && player.equals(Player.X) ||
-                gameStatus != GameStatus.X_TURN && gameStatus != GameStatus.O_TURN
+                gameStatus == GameStatus.O_TURN && player.equals(Player.X)
         ) {
             throw new ServerException("It's not your turn!", HttpStatus.FORBIDDEN);
         }
