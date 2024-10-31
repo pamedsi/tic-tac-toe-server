@@ -92,4 +92,24 @@ public class GameService {
         initGrid();
         this.gameStatus = GameStatus.WAITING_FIRST_PLAYER;
     }
+
+    private void checkWinner() {
+
+    }
+
+    private boolean checkIfThereIsAWinnerHorizontally() {
+        boolean hasAWinnerHorizontally = false;
+        for (List<Cell> row : this.grid) {
+            if (row.stream().distinct().count() == 1) {
+                hasAWinnerHorizontally = true;
+                break;
+            }
+        }
+        return hasAWinnerHorizontally;
+    }
+
+    private boolean checkIfThereIsAWinnerVertically() {
+        // TODO
+        return false;
+    }
 }
