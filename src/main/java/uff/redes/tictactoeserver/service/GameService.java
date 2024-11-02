@@ -86,7 +86,7 @@ public class GameService {
     }
 
     public GameStatusDTO getStatus() {
-        return new GameStatusDTO(gameStatus, grid);
+        return new GameStatusDTO(gameStatus, new ScoreDTO(score), grid);
     }
 
     public void setStatus(GameStatus gameStatus) {

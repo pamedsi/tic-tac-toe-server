@@ -7,5 +7,6 @@ import java.util.List;
 
 public record GameStatusDTO(
         GameStatus status,
+        ScoreDTO score,
         List<List<Cell>> grid
 ) {}
