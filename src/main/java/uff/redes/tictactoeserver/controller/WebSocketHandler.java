@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.AbstractSubProtocolEvent;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-import uff.redes.tictactoeserver.domain.GameEvent;
+import uff.redes.tictactoeserver.event.GameEvent;
 import uff.redes.tictactoeserver.domain.GameStatus;
 import uff.redes.tictactoeserver.dto.GameEventDTO;
 import uff.redes.tictactoeserver.event.GameEventEmitter;

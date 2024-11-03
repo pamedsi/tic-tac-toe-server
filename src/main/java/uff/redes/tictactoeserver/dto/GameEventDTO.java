@@ -2,7 +2,7 @@ package uff.redes.tictactoeserver.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import uff.redes.tictactoeserver.domain.Cell;
-import uff.redes.tictactoeserver.domain.GameEvent;
+import uff.redes.tictactoeserver.event.GameEvent;
 
 import java.util.Optional;
 

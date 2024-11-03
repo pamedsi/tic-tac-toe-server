@@ -3,7 +3,7 @@ package uff.redes.tictactoeserver.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uff.redes.tictactoeserver.domain.Cell;
-import uff.redes.tictactoeserver.domain.GameEvent;
+import uff.redes.tictactoeserver.event.GameEvent;
 import uff.redes.tictactoeserver.domain.GameStatus;
 import uff.redes.tictactoeserver.domain.Score;
 import uff.redes.tictactoeserver.dto.*;
