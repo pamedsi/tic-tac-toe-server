@@ -1,4 +1,4 @@
-package uff.redes.tictactoeserver.domain;
+package uff.redes.tictactoeserver.event;
 
 public enum GameEvent {
     FIRST_PLAYER_JOINED,
@@ -6,5 +6,6 @@ public enum GameEvent {
     GUEST_JOINED,
     MATCH_STARTED,
     MOVE,
-    MATCH_ENDED
+    MATCH_ENDED,
+    SESSIONS_RESET
 }

@@ -3,7 +3,10 @@ package uff.redes.tictactoeserver.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uff.redes.tictactoeserver.domain.Session;
+import uff.redes.tictactoeserver.dto.GameEventDTO;
 import uff.redes.tictactoeserver.dto.UserDTO;
+import uff.redes.tictactoeserver.event.GameEvent;
+import uff.redes.tictactoeserver.event.GameEventEmitter;
 import uff.redes.tictactoeserver.exception.ServerException;
 
 import java.util.List;
@@ -12,13 +15,14 @@ import java.util.UUID;
 @Service
 public class SessionService {
 //    private static final Logger log = LoggerFactory.getLogger(SessionService.class);
+private final GameEventEmitter gameEventEmitter;
     private Session xSession;
     private Session oSession;
     private List<Session> guests;
 
-//    public SessionService(GameEventEmitter gameEventEmitter) {
-//        this.gameEventEmitter = gameEventEmitter;
-//    }
+    public SessionService(GameEventEmitter gameEventEmitter) {
+        this.gameEventEmitter = gameEventEmitter;
+    }
 
     public Session startSession(UserDTO user) {
         if (user.isGuest()) {
@@ -100,6 +104,7 @@ public class SessionService {
     public void reset() {
         this.oSession = null;
         this.xSession = null;
+        gameEventEmitter.emmit(new GameEventDTO(GameEvent.SESSIONS_RESET));
     }
 
     public boolean isWSConnected(UUID sessionID) {

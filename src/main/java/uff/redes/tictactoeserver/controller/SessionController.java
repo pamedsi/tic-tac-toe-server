@@ -47,8 +47,8 @@ public class SessionController {
         return session;
     }
 
-    @GetMapping("/restart")
-    @ResponseStatus(HttpStatus.CONTINUE)
+    @GetMapping("/reset")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void restart() {
         log.info("Restarting session...");
         sessionService.reset();
